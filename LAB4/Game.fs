@@ -4,6 +4,7 @@ open SFML.Graphics
 open SFML.System
 open GameState
 open GameConsts
+open System.Threading
 
 // Функция для обработки столкновения с монетами
 let checkCoinCollision (position: Vector2f) (squareSize: float32) (coins: Coin list) =
@@ -12,7 +13,7 @@ let checkCoinCollision (position: Vector2f) (squareSize: float32) (coins: Coin l
             let coinBounds = FloatRect(coin.Position.X, coin.Position.Y, coin.Size, coin.Size)
             
             // Проверка, пересекается ли квадрат с монетой (по любой стороне квадрата)
-            let squareBounds = FloatRect(position.X, position.Y, squareSize, squareSize)
+            let squareBounds = FloatRect(position.X , position.Y, squareSize, squareSize)
             
             if coinBounds.Intersects(squareBounds) then
                 (remaining, coin::collected)  // Добавляем монету в список собранных
@@ -83,6 +84,14 @@ let drawPlatforms (window: RenderWindow) =
                 window.Draw(platformShape)
             )
 
+let checkDoorCollisison (position: Vector2f) (squareSize: float32) (door: RectangleShape) =
+    let doorBounds = door.GetGlobalBounds() 
+    let squareRightX = position.X + squareSize
+
+    squareRightX >= doorBounds.Left && 
+    squareRightX <= doorBounds.Left + 1.0f 
+
+
 // Рекурсивная функция игрового цикла
 let rec gameLoop (state: GameState) =
     if window.IsOpen then
@@ -111,11 +120,12 @@ let rec gameLoop (state: GameState) =
             if checkEnemyCollision newPosition squareSize enemies then
                 printfn "Game Over! You hit an enemy!"
                 window.Close()
+          
 
             // Проверка столкновения с монетами
             let remainingCoins, collected = checkCoinCollision newPosition squareSize state.Coins
             let newCollectedCoins = state.CollectedCoins + collected
-            // Отрисовка
+
             window.Clear(Color.White)
 
             
@@ -123,11 +133,30 @@ let rec gameLoop (state: GameState) =
             drawCoins window remainingCoins
             drawEnemies window enemies
 
+            // дверь
+            let doorShape = RectangleShape(Size = door.Size,Position = door.Position)
+            if state.CollectedCoins = finishCoins then
+                doorShape.FillColor<-Color.Green
+            else
+                doorShape.FillColor<-Color.Red
+            window.Draw(doorShape)
+
             let square = RectangleShape(Size = Vector2f(squareSize, squareSize), FillColor = Color.Red)
             square.Position <- newPosition
             window.Draw(square)
             window.Display()
-            
+
+            if checkDoorCollisison newPosition squareSize doorShape && doorShape.FillColor = Color.Green then
+                let winText = Text("You Win!", font, 50u) // 50u — размер шрифта
+                winText.FillColor <- Color.Green
+                winText.Position <- Vector2f(float32 windowWidth / 2.0f - 100.0f, float32 windowHeight / 2.0f - 50.0f) // Центр окна
+
+                window.Clear(Color.White)
+                window.Draw(winText)
+                window.Display()
+                Thread.Sleep(3000)
+                window.Close()
+  
             let newState = {
                 Position = newPosition
                 VerticalSpeed = newVerticalSpeed

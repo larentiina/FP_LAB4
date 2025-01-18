@@ -1,5 +1,7 @@
 module GameConsts
 
+open SFML.Graphics
+
 let windowWidth = 800
 let windowHeight = 600
 
@@ -12,3 +14,5 @@ let squareSize = 50.0f
 let gravity = 0.5f
 let jumpHeight = -10.0f
 let moveSpeed = 5.0f
+
+let font = new Font("arial.ttf")
