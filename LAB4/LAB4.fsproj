@@ -6,7 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Program.fs" />
+    <Compile Include="Consts.fs" />
+    <Compile Include="GameState.fs" />
+    <Compile Include="Game.fs" /> 
+    <Compile Include="Program.fs" /> 
   </ItemGroup>
 
   <ItemGroup>
