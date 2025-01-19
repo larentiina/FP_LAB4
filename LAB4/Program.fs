@@ -2,5 +2,7 @@
 open GameState
 open Game
 
-
-gameLoop initalState
+[<EntryPoint>]
+let main _ =
+    gameLoop initalState
+    0

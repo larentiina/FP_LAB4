@@ -8,11 +8,10 @@ let windowHeight = 600
 let platformHeight = 30.0f
 
 let platformWidth = 150.0f
-let squareSize = 50.0f
+let squareSize = 20.0f
 
-// Константы для физики
-let gravity = 0.5f
-let jumpHeight = -10.0f
+let gravity = 1.0f
+let jumpHeight = -10.0f 
 let moveSpeed = 5.0f
 
 let font = new Font("arial.ttf")
