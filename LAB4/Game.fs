@@ -2,6 +2,7 @@ module Game
 open SFML.Window
 open SFML.Graphics
 open SFML.System
+open SFML.Audio
 open GameState
 open GameConsts
 open System.Threading
@@ -15,6 +16,7 @@ let checkCoinCollision (position: Vector2f) (squareSize: float32) (coins: Coin l
             let squareBounds = FloatRect(position.X , position.Y, squareSize, squareSize)
             
             if coinBounds.Intersects(squareBounds) then
+                coinSound.Play()
                 (remaining, coin::collected)  
             else
                 (coin::remaining, collected)  
@@ -213,6 +215,7 @@ let rec gameLoop (state: GameState) =
             let updatedEnemies = moveEnemies state.Enemies platforms
             
             if checkEnemyCollision newPosition squareSize updatedEnemies then
+                damageSound.Play()
                 gameLoop initalState  
 
             let remainingCoins, collected = checkCoinCollision newPosition squareSize state.Coins
