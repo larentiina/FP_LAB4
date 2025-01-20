@@ -39,17 +39,17 @@ type Door = {
 
 let initialCoins: Coin list = [
     { Position = Vector2f(80.0f, 460.0f)}
-    // { Position = Vector2f(350.0f, 550.0f)}
-    // { Position = Vector2f(60.0f, 415.0f)}
-    // { Position = Vector2f(40.0f, 280.0f)}
-    // { Position = Vector2f(60.0f, 100.0f)}
-    // { Position = Vector2f(210.0f, 55.0f)}
-    // { Position = Vector2f(750.0f, 550.0f) }
-    // { Position = Vector2f(405.0f, 460.0f)}
-    // { Position = Vector2f(405.0f, 325.0f) }
-    // { Position = Vector2f(600.0f, 370.0f)}
-    // { Position = Vector2f(450.0f, 190.0f)}
-    // { Position = Vector2f(430.0f, 55.0f) }
+    { Position = Vector2f(350.0f, 550.0f)}
+    { Position = Vector2f(60.0f, 415.0f)}
+    { Position = Vector2f(40.0f, 280.0f)}
+    { Position = Vector2f(60.0f, 100.0f)}
+    { Position = Vector2f(210.0f, 55.0f)}
+    { Position = Vector2f(750.0f, 550.0f) }
+    { Position = Vector2f(405.0f, 460.0f)}
+    { Position = Vector2f(405.0f, 325.0f) }
+    { Position = Vector2f(600.0f, 370.0f)}
+    { Position = Vector2f(450.0f, 190.0f)}
+    { Position = Vector2f(430.0f, 55.0f) }
 ]
 
 let finishCoins = List.length initialCoins
