@@ -20,7 +20,7 @@ let enemySpeed = 2.0f
 
 let coinSize = 15.0f
 
-let font = new Font("Mario-Party-Hudson-Font.ttf")
+let font = new Font("font/Mario-Party-Hudson-Font.ttf")
 let coinCounterPosition = Vector2f(35.0f, 20.0f)
 
 let coinSoundBuffer = SoundBuffer("sounds/coin.wav")
