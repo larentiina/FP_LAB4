@@ -117,7 +117,7 @@ let door = {
     Position = Vector2f(750.0f, 35.0f); Size = Vector2f(20.0f, 40.0f)
 }
 
-let window = RenderWindow(VideoMode(uint32 windowWidth, uint32 windowHeight), "Jumping Square")
+let window = RenderWindow(VideoMode(uint32 windowWidth, uint32 windowHeight), "Platformer")
 window.SetFramerateLimit(60u)
 window.Closed.Add(fun _ -> window.Close()) 
 
