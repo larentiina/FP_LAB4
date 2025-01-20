@@ -3,12 +3,11 @@ open SFML.Window
 open SFML.Graphics
 open SFML.System
 open GameConsts
+open System.Diagnostics
 
 
 type Coin = {
-    Position: Vector2f
-    Size: float32
-    
+    Position: Vector2f 
 }
 
 type Platform = {
@@ -39,18 +38,18 @@ type Door = {
 }
 
 let initialCoins: Coin list = [
-    { Position = Vector2f(80.0f, 460.0f); Size = 15.0f }
-    { Position = Vector2f(350.0f, 550.0f); Size = 15.0f }
-    { Position = Vector2f(60.0f, 415.0f); Size = 15.0f }
-    { Position = Vector2f(40.0f, 280.0f); Size = 15.0f }
-    { Position = Vector2f(60.0f, 100.0f); Size = 15.0f }
-    { Position = Vector2f(210.0f, 55.0f); Size = 15.0f }
-    { Position = Vector2f(750.0f, 550.0f); Size = 15.0f }
-    { Position = Vector2f(405.0f, 460.0f); Size = 15.0f }
-    { Position = Vector2f(405.0f, 325.0f); Size = 15.0f }
-    { Position = Vector2f(600.0f, 370.0f); Size = 15.0f }
-    { Position = Vector2f(450.0f, 190.0f); Size = 15.0f }
-    { Position = Vector2f(430.0f, 55.0f); Size = 15.0f }
+    { Position = Vector2f(80.0f, 460.0f)}
+    // { Position = Vector2f(350.0f, 550.0f)}
+    // { Position = Vector2f(60.0f, 415.0f)}
+    // { Position = Vector2f(40.0f, 280.0f)}
+    // { Position = Vector2f(60.0f, 100.0f)}
+    // { Position = Vector2f(210.0f, 55.0f)}
+    // { Position = Vector2f(750.0f, 550.0f) }
+    // { Position = Vector2f(405.0f, 460.0f)}
+    // { Position = Vector2f(405.0f, 325.0f) }
+    // { Position = Vector2f(600.0f, 370.0f)}
+    // { Position = Vector2f(450.0f, 190.0f)}
+    // { Position = Vector2f(430.0f, 55.0f) }
 ]
 
 let finishCoins = List.length initialCoins
@@ -97,10 +96,10 @@ let platforms = [
 ]
 
 let enemies = [
-    { Position = Vector2f(60.0f, 421.0f); Size = 15.0f; Direction = 1.0f; Speed = 2.0f }
-    { Position = Vector2f(60.0f, 151.0f); Size = 15.0f; Direction = -1.0f; Speed = 2.0f }
-    { Position = Vector2f(740.0f, 556.0f); Size = 15.0f; Direction = -1.0f; Speed = 2.0f }
-    { Position = Vector2f(500.0f, 196.0f); Size = 15.0f; Direction = -1.0f; Speed = 2.0f }
+    { Position = Vector2f(60.0f, 421.0f); Size = enemySize; Direction = 1.0f; Speed = enemySpeed }
+    { Position = Vector2f(60.0f, 151.0f); Size = enemySize; Direction = -1.0f; Speed =  enemySpeed }
+    { Position = Vector2f(740.0f, 556.0f); Size = enemySize; Direction = -1.0f; Speed =  enemySpeed }
+    { Position = Vector2f(500.0f, 196.0f); Size = enemySize; Direction = -1.0f; Speed =  enemySpeed }
 ]
 
 let initialPosition = Vector2f(50.0f, float32 windowHeight - platformHeight - squareSize)// Начальная позиция квадрата
@@ -120,4 +119,6 @@ let door = {
 
 let window = RenderWindow(VideoMode(uint32 windowWidth, uint32 windowHeight), "Jumping Square")
 window.SetFramerateLimit(60u)
-window.Closed.Add(fun _ -> window.Close()) // это чтобы при нажатии на крестик игра закрывалась
+window.Closed.Add(fun _ -> window.Close()) 
+
+let stopwatch = Stopwatch.StartNew()

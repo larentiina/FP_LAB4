@@ -6,10 +6,11 @@ open GameState
 open GameConsts
 open System.Threading
 
+
 let checkCoinCollision (position: Vector2f) (squareSize: float32) (coins: Coin list) =
     let newCoins, collectedCoins =
         coins |> List.fold (fun (remaining, collected) coin ->
-            let coinBounds = FloatRect(coin.Position.X, coin.Position.Y, coin.Size, coin.Size)
+            let coinBounds = FloatRect(coin.Position.X, coin.Position.Y,  coinSize,  coinSize)
             
             let squareBounds = FloatRect(position.X , position.Y, squareSize, squareSize)
             
@@ -24,9 +25,6 @@ let checkCoinCollision (position: Vector2f) (squareSize: float32) (coins: Coin l
 let isGrounded (position: Vector2f) (platforms: Platform list) =
     platforms
     |> List.exists (fun platform ->
-        let platformShape = RectangleShape(Size = Vector2f(platform.Width, platformHeight), Position = platform.Position)
-        let platformBounds = platformShape.GetGlobalBounds()
-
         let isTouchingPlatform = 
             (platform.Position.Y - (position.Y + squareSize)) = 0.0f && 
             position.X + squareSize / 2.0f >= platform.Position.X && 
@@ -38,9 +36,6 @@ let isGrounded (position: Vector2f) (platforms: Platform list) =
 let isPlatformLeft (position: Vector2f) (platforms: Platform list) =
     platforms
     |> List.exists (fun platform ->
-        let platformShape = RectangleShape(Size = Vector2f(platform.Width, platformHeight), Position = platform.Position)
-        let platformBounds = platformShape.GetGlobalBounds()
-
         let isTouchingPlatformLeft =
             (platform.Position.X = position.X + squareSize - float32 5) && 
             ((position.Y) < (platform.Position.Y + platform.Height)) &&
@@ -52,9 +47,6 @@ let isPlatformLeft (position: Vector2f) (platforms: Platform list) =
 let isPlatformRight (position: Vector2f) (platforms: Platform list) =
     platforms
     |> List.exists (fun platform ->
-        let platformShape = RectangleShape(Size = Vector2f(platform.Width, platformHeight), Position = platform.Position)
-        let platformBounds = platformShape.GetGlobalBounds()
-
         let isTouchingPlatformRight =   
             (platform.Position.X + platform.Width = position.X + float32 5) && 
             (position.Y < (platform.Position.Y + platform.Height)) &&
@@ -66,9 +58,6 @@ let isPlatformRight (position: Vector2f) (platforms: Platform list) =
 let isPlatformTop (position: Vector2f) (platforms: Platform list) =
     platforms
     |> List.exists (fun platform ->
-        let platformShape = RectangleShape(Size = Vector2f(platform.Width, platformHeight), Position = platform.Position)
-        let platformBounds = platformShape.GetGlobalBounds()
-
         let isTouchingPlatformTop = 
             (platform.Position.Y + platform.Height = (position.Y + float32 4)) &&
             position.X + squareSize / 2.0f >= platform.Position.X && 
@@ -80,8 +69,6 @@ let isPlatformTop (position: Vector2f) (platforms: Platform list) =
 let isInsidePlatform (position: Vector2f) (platforms: Platform list) =
     platforms
     |> List.tryFind (fun platform ->
-        let platformBounds = RectangleShape(Size = Vector2f(platform.Width, platformHeight), Position = platform.Position).GetGlobalBounds()
-
         position.X + squareSize / 2.0f >= platform.Position.X &&
         position.X + squareSize / 2.0f <= platform.Position.X + platform.Width &&
         position.Y + squareSize >= platform.Position.Y && 
@@ -96,7 +83,6 @@ let updatePosition (position: Vector2f) (verticalSpeed: float32) (isJumping: boo
     let newPosition = 
         Vector2f(position.X + horizontalShift, position.Y + newVerticalSpeed)
     
-    let grounded = isGrounded newPosition platforms
     let isTouchPlatformLeft = isPlatformLeft newPosition platforms
     let isTouchPlatformRight = isPlatformRight newPosition platforms
 
@@ -139,10 +125,30 @@ let checkEnemyCollision (position: Vector2f) (squareSize: float32) (enemies: Ene
 
 let drawCoins (window: RenderWindow) (coins: Coin list) =
     coins |> List.iter (fun coin ->
-        let coinShape = RectangleShape(Size = Vector2f(coin.Size, coin.Size), FillColor = Color.Yellow)
+        let coinShape = RectangleShape(Size = Vector2f(coinSize,  coinSize), FillColor = Color.Yellow)
         coinShape.Position <- coin.Position
         window.Draw(coinShape)
     )
+
+let coinCounter (coins: int) =
+    let label = Text(sprintf "Coins Left: %d" coins, font)
+    label.Position <- coinCounterPosition
+    label.CharacterSize <- 30u  
+    label.FillColor <- Color.Red
+    label
+
+let finishText = 
+    let winText = Text("You Win!", font, 60u) 
+    winText.FillColor <- Color.Green
+    winText.Position <- Vector2f(float32 windowWidth / 2.0f - 100.0f, float32 windowHeight / 2.0f - 50.0f) 
+    printf "%f" stopwatch.Elapsed.TotalMinutes
+    let timetText = Text(sprintf "Time: %.2f min" stopwatch.Elapsed.TotalMinutes, font, 50u)
+    timetText.FillColor <- Color.Green
+    timetText.Position <- Vector2f(float32 windowWidth / 2.0f - 120.0f, float32 windowHeight / 2.0f) // Центр окна
+    window.Clear(Color.White)
+    window.Draw(winText)
+    window.Draw(timetText)
+    window.Display()
 
 let drawPlatforms (window: RenderWindow) =
     platforms |> List.iter (fun platform ->
@@ -213,7 +219,8 @@ let rec gameLoop (state: GameState) =
             let newCollectedCoins = state.CollectedCoins + collected
 
             window.Clear(Color.White)
-            
+
+            window.Draw(coinCounter (finishCoins - newCollectedCoins))
             drawPlatforms window
             drawCoins window remainingCoins
             drawEnemies window updatedEnemies
@@ -231,13 +238,8 @@ let rec gameLoop (state: GameState) =
             window.Display()
 
             if checkDoorCollisison newPosition squareSize doorShape && doorShape.FillColor = Color.Green then
-                let winText = Text("You Win!", font, 50u) 
-                winText.FillColor <- Color.Green
-                winText.Position <- Vector2f(float32 windowWidth / 2.0f - 100.0f, float32 windowHeight / 2.0f - 50.0f) // Центр окна
-
-                window.Clear(Color.White)
-                window.Draw(winText)
-                window.Display()
+                stopwatch.Stop()
+                finishText
                 Thread.Sleep(3000)
                 window.Close()
   
