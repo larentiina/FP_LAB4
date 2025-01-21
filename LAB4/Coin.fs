@@ -7,25 +7,21 @@ open SFML.Audio
 open GameConsts
 open GameState
 
-let coinTexture = new Texture("sprite/coin.png")
-let frameWidth = 16
-let frameHeight = 16
-let totalFrames = 15
+let updateCoinAnimation (coinAnimationState: CoinAnimationState) deltaTime : CoinAnimationState =
+    let newFrameTime = coinAnimationState.FrameTime + deltaTime
+    if newFrameTime >= animationSpeed then
+        { CurrentFrame = (coinAnimationState.CurrentFrame + 1) % totalFrames
+          FrameTime = 0.2f }
+    else
+        { coinAnimationState with FrameTime = newFrameTime }
 
-let mutable currentFrame = 1
-let mutable frameTime = 0.2f
-let animationSpeed = 0.3f 
-
-let drawCoins (window: RenderWindow) (coins: Coin list) (deltaTime: float32) =
+let drawCoins (window: RenderWindow) (coins: Coin list) (coinAnimation: CoinAnimationState) (deltaTime: float32) =
     coins |> List.iter (fun coin ->
         let sprite = Sprite(coinTexture)
-        
-        frameTime <- frameTime + deltaTime
-        if frameTime >= animationSpeed then
-            currentFrame <- (currentFrame + 1) % totalFrames
-            frameTime <- 0.0f
-        
-        let frameX = currentFrame * frameWidth
+
+        let updatedCoinAnimation = updateCoinAnimation coinAnimation deltaTime
+
+        let frameX = updatedCoinAnimation.CurrentFrame * frameWidth
         sprite.TextureRect <- IntRect(frameX, 0, frameWidth, frameHeight)
         sprite.Position <- coin.Position
 
