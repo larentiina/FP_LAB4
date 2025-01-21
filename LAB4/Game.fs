@@ -26,8 +26,12 @@ let finishText =
     window.Draw(timetText)
     window.Display()
 
+let clock = Clock() // Таймер для измерения времени между кадрами
+
 let rec gameLoop (state: GameState) =
     if window.IsOpen then
+        let deltaTime = clock.Restart().AsSeconds()
+
         window.DispatchEvents()
         let isMovingRight = Keyboard.IsKeyPressed(Keyboard.Key.Right)
         let isMovingLeft = Keyboard.IsKeyPressed(Keyboard.Key.Left)
@@ -63,8 +67,8 @@ let rec gameLoop (state: GameState) =
 
             window.Draw(coinCounter (finishCoins - newCollectedCoins))
             drawPlatforms window
-            drawCoins window remainingCoins
-            drawEnemies window updatedEnemies
+            drawCoins window remainingCoins deltaTime
+            drawEnemies window updatedEnemies 
 
             let doorShape = RectangleShape(Size = door.Size,Position = door.Position)
             if state.CollectedCoins = finishCoins then
