@@ -32,13 +32,6 @@ let drawCoins (window: RenderWindow) (coins: Coin list) (deltaTime: float32) =
         window.Draw(sprite)
     )
 
-// let drawCoins (window: RenderWindow) (coins: Coin list) =
-//     coins |> List.iter (fun coin ->
-//         let coinShape = RectangleShape(Size = Vector2f(coinSize,  coinSize), FillColor = Color.Yellow)
-//         coinShape.Position <- coin.Position
-//         window.Draw(coinShape)
-//     )
-
 let coinCounter (coins: int) =
     let label = Text(sprintf "Coins Left: %d" coins, font)
     label.Position <- coinCounterPosition
