@@ -26,7 +26,7 @@ let finishText =
     window.Draw(timetText)
     window.Display()
 
-let clock = Clock() // Таймер для измерения времени между кадрами
+let clock = Clock()
 
 let rec gameLoop (state: GameState) =
     if window.IsOpen then
