@@ -16,6 +16,18 @@ open CharacterBehaviour
 
 let clock = Clock() 
 
+let finishText = 
+    let winText = Text("You Win!", font, 60u) 
+    winText.FillColor <- Color.Green
+    winText.Position <- Vector2f(float32 windowWidth / 2.0f - 100.0f, float32 windowHeight / 2.0f - 50.0f) 
+    let timetText = Text(sprintf "Time: %.2f min" stopwatch.Elapsed.TotalMinutes, font, 50u)
+    timetText.FillColor <- Color.Green
+    timetText.Position <- Vector2f(float32 windowWidth / 2.0f - 120.0f, float32 windowHeight / 2.0f) // Центр окна
+    window.Clear(Color.White)
+    window.Draw(winText)
+    window.Draw(timetText)
+    window.Display()
+
 let rec gameLoop (state: GameState) =
     if window.IsOpen then
         let deltaTime = clock.Restart().AsSeconds()
@@ -74,16 +86,7 @@ let rec gameLoop (state: GameState) =
 
             if checkDoorCollisison newPosition squareSize doorShape && doorShape.FillColor = Color.Green then
                 stopwatch.Stop()
-                let winText = Text("You Win!", font, 60u) 
-                winText.FillColor <- Color.Green
-                winText.Position <- Vector2f(float32 windowWidth / 2.0f - 100.0f, float32 windowHeight / 2.0f - 50.0f) 
-                let timetText = Text(sprintf "Time: %.2f min" stopwatch.Elapsed.TotalMinutes, font, 50u)
-                timetText.FillColor <- Color.Green
-                timetText.Position <- Vector2f(float32 windowWidth / 2.0f - 120.0f, float32 windowHeight / 2.0f) // Центр окна
-                window.Clear(Color.White)
-                window.Draw(winText)
-                window.Draw(timetText)
-                window.Display()
+                finishText
                 Thread.Sleep(3000)
                 window.Close()
   
