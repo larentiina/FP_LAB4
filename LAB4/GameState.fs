@@ -5,6 +5,10 @@ open SFML.System
 open GameConsts
 open System.Diagnostics
 
+type CoinAnimationState = {
+    CurrentFrame: int
+    FrameTime: float32
+}
 
 type Coin = {
     Position: Vector2f 
@@ -30,6 +34,7 @@ type GameState = {
     Coins: Coin list
     CollectedCoins: int
     Enemies: Enemy list
+    CoinAnimation: CoinAnimationState
 }
 
 type Door = {
@@ -103,6 +108,7 @@ let enemies = [
 ]
 
 let initialPosition = Vector2f(50.0f, float32 windowHeight - platformHeight - squareSize)// Начальная позиция квадрата
+let initialCoinAnimation = { CurrentFrame = 0; FrameTime = 0.0f }
 
 let initalState = { 
     Position = initialPosition
@@ -111,6 +117,7 @@ let initalState = {
     Coins = initialCoins
     CollectedCoins= 0
     Enemies= enemies
+    CoinAnimation=  initialCoinAnimation
     }
 
 let door = {
