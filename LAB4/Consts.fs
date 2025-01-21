@@ -27,3 +27,9 @@ let coinSoundBuffer = SoundBuffer("sounds/coin.wav")
 let coinSound = Sound(coinSoundBuffer)
 let damageSoundBuffer = SoundBuffer("sounds/damage.wav")
 let damageSound = Sound(damageSoundBuffer)
+
+let coinTexture = new Texture("sprite/coin.png")
+let frameWidth = 16
+let frameHeight = 16
+let totalFrames = 15
+let animationSpeed = 0.3f
