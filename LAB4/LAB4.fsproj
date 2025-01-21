@@ -8,6 +8,11 @@
   <ItemGroup>
     <Compile Include="Consts.fs" />
     <Compile Include="GameState.fs" />
+    <Compile Include="Character.fs" />
+    <Compile Include="Platform.fs" />
+    <Compile Include="Enemy.fs" />
+    <Compile Include="Door.fs" />
+    <Compile Include="Coin.fs" />
     <Compile Include="Game.fs" /> 
     <Compile Include="Program.fs" /> 
   </ItemGroup>
